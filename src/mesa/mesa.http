@@ -1,0 +1,25 @@
+### List
+GET http://localhost:3000/mesas
+
+### Create Mesa (Invalid - Missing fields to test validation)
+POST http://localhost:3000/mesas
+Content-Type: application/json
+
+{}
+
+### Create Mesa (Valid)
+POST http://localhost:3000/mesas
+Content-Type: application/json
+
+{
+  "nome": "Mesa 1",
+  "capacidade": 4
+}
+
+### Update Mesa (Valid)
+PATCH http://localhost:3000/mesas/1
+Content-Type: application/json
+
+{
+  "nome": "Mesa 1"
+}

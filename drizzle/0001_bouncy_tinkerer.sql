@@ -1,0 +1,1 @@
+ALTER TABLE "mesas" ADD COLUMN "status" text DEFAULT 'disponivel' NOT NULL;

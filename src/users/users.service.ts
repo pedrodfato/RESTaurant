@@ -6,6 +6,8 @@ import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as schema from '../db/schema';
 import * as bcrypt from 'bcrypt';
 
+import { eq } from 'drizzle-orm';
+
 @Injectable()
 export class UsersService {
   constructor(@Inject('DRIZZLE') private db: NodePgDatabase<typeof schema>) {}
@@ -34,17 +36,23 @@ export class UsersService {
     return newUser;
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    const data = await this.db.query.users.findMany({
+      columns: { senha: false },
+    });
+    return data;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    return await this.db.query.users.findFirst({
+      where: eq(schema.users.id, id),
+      columns: { senha: false },
+    });
   }
 
   async findOneByEmail(email: string) {
     return this.db.query.users.findFirst({
-      where: (users, { eq }) => eq(users.email, email),
+      where: eq(schema.users.email, email),
     });
   }
 

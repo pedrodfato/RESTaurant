@@ -1,13 +1,15 @@
 import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
-@Controller('auth')
+@Controller('users')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
-  @Post('login')
+  @Post('/login')
   signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(signInDto.username, signInDto.password);
+    const email = signInDto.email || signInDto.username;
+    const password = signInDto.senha || signInDto.password;
+    return this.authService.signIn(email, password);
   }
 }

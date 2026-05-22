@@ -10,7 +10,16 @@ export class MesaService {
   constructor(@Inject('DRIZZLE') private db: NodePgDatabase<typeof schema>) {}
 
   async create(createMesaDto: CreateMesaDto) {
-    return this.db.insert(schema.mesas).values(createMesaDto);
+    const [mesa] = await this.db
+      .insert(schema.mesas)
+      .values(createMesaDto)
+      .returning({
+        id: schema.mesas.id,
+        nome: schema.mesas.nome,
+        capacidade: schema.mesas.capacidade,
+        status: schema.mesas.status,
+      });
+    return mesa;
   }
 
   async findAll() {

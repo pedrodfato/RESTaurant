@@ -15,9 +15,15 @@ describe('AuthController', () => {
 
     const controller = module.get<AuthController>(AuthController);
 
-    const result = await controller.signIn({ email: 'pedro@teste.com', senha: '123456' });
+    const result = await controller.signIn({
+      email: 'pedro@teste.com',
+      senha: '123456',
+    });
 
     expect(result).toEqual({ access_token: 'token-falso' });
-    expect(authServiceMock.signIn).toHaveBeenCalledWith('pedro@teste.com', '123456');
+    expect(authServiceMock.signIn).toHaveBeenCalledWith(
+      'pedro@teste.com',
+      '123456',
+    );
   });
 });

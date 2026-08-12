@@ -23,9 +23,9 @@ describe('AuthService', () => {
 
     const service = module.get<AuthService>(AuthService);
 
-    await expect(service.signIn('naoexiste@teste.com', '123456')).rejects.toThrow(
-      UnauthorizedException,
-    );
+    await expect(
+      service.signIn('naoexiste@teste.com', '123456'),
+    ).rejects.toThrow(UnauthorizedException);
     expect(jwtServiceMock.signAsync).not.toHaveBeenCalled();
   });
 });

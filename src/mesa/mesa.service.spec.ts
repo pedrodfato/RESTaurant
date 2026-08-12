@@ -3,7 +3,12 @@ import { MesaService } from './mesa.service';
 
 describe('MesaService', () => {
   it('deve retornar a mesa encontrada pelo id', async () => {
-    const mesaMock = { id: 1, nome: 'Mesa 1', capacidade: 4, status: 'disponivel' };
+    const mesaMock = {
+      id: 1,
+      nome: 'Mesa 1',
+      capacidade: 4,
+      status: 'disponivel',
+    };
     const mockDb = {
       query: {
         mesas: {

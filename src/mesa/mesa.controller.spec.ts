@@ -6,7 +6,9 @@ import { RolesGuard } from '../auth/roles.guard';
 
 describe('MesaController', () => {
   it('deve delegar findAll para o MesaService e devolver o resultado', async () => {
-    const mesasMock = [{ id: 1, nome: 'Mesa 1', capacidade: 4, status: 'disponivel' }];
+    const mesasMock = [
+      { id: 1, nome: 'Mesa 1', capacidade: 4, status: 'disponivel' },
+    ];
     const mesaServiceMock = {
       findAll: jest.fn().mockResolvedValue(mesasMock),
     };

@@ -1,5 +1,7 @@
 # RESTaurant API
 
+[![CI](https://github.com/pedrodfato/RESTaurant/actions/workflows/ci.yml/badge.svg)](https://github.com/pedrodfato/RESTaurant/actions/workflows/ci.yml)
+
 API REST para gerenciamento de reservas de um restaurante e cadastro de mesas, autenticação de usuários e sistema de reservas com verificação de disponibilidade e capacidade.
 
 Construída com [NestJS](https://nestjs.com/), [Drizzle ORM](https://orm.drizzle.team/) e PostgreSQL.

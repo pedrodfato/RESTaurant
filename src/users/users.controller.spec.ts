@@ -5,7 +5,12 @@ import { AuthGuard } from '../auth/auth.guard';
 
 describe('UsersController', () => {
   it('deve delegar o registro de usuário para o UsersService', async () => {
-    const novoUsuario = { id: 1, nome: 'Pedro', email: 'pedro@teste.com', role: 'user' };
+    const novoUsuario = {
+      id: 1,
+      nome: 'Pedro',
+      email: 'pedro@teste.com',
+      role: 'user',
+    };
     const usersServiceMock = {
       create: jest.fn().mockResolvedValue(novoUsuario),
     };

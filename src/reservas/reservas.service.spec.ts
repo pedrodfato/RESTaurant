@@ -17,7 +17,9 @@ describe('ReservasService', () => {
     const mockDb = {
       query: {
         mesas: {
-          findFirst: jest.fn().mockResolvedValue({ id: 1, status: 'reservada', capacidade: 4 }),
+          findFirst: jest
+            .fn()
+            .mockResolvedValue({ id: 1, status: 'reservada', capacidade: 4 }),
         },
       },
       transaction: jest.fn((callback) => callback(mockTx)),

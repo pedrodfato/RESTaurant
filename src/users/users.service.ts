@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { Inject } from '@nestjs/common';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as schema from '../db/schema';
@@ -38,11 +37,10 @@ export class UsersService {
 
   async findAll() {
     const data = await this.db.query.users.findMany({
-      columns: { senha: false, role:false, email: false },
+      columns: { senha: false, role: false, email: false },
     });
     return data;
   }
-
 
   async findOneByEmail(email: string) {
     return this.db.query.users.findFirst({

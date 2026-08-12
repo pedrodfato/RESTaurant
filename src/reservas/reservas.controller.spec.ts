@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ReservasController } from './reservas.controller';
 import { ReservasService } from './reservas.service';
 import { AuthGuard } from '../auth/auth.guard';
+import { JwtPayload } from '../auth/jwt-payload.interface';
 
 describe('ReservasController', () => {
   it('deve extrair o usuario_id do token e combinar com o DTO antes de criar a reserva', async () => {
@@ -20,10 +21,19 @@ describe('ReservasController', () => {
 
     const controller = module.get<ReservasController>(ReservasController);
 
-    const dto = { mesa_id: 2, numero_pessoas: 3, data_reserva: '2026-08-20T19:00:00.000Z' };
-    const fakeRequest = { user: { sub: 7 } } as any;
+    const dto = {
+      mesa_id: 2,
+      numero_pessoas: 3,
+      data_reserva: '2026-08-20T19:00:00.000Z',
+    };
+    const fakeUser: JwtPayload = {
+      sub: 7,
+      nome: 'Pedro',
+      email: 'pedro@teste.com',
+      role: 'user',
+    };
 
-    const result = await controller.create(fakeRequest, dto);
+    const result = await controller.create(fakeUser, dto);
 
     expect(result).toEqual(reservaMock);
     expect(reservasServiceMock.create).toHaveBeenCalledWith({

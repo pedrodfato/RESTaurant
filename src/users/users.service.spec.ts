@@ -3,7 +3,12 @@ import { UsersService } from './users.service';
 
 describe('UsersService', () => {
   it('deve criar um usuário salvando a senha em hash, não em texto puro', async () => {
-    const novoUsuario = { id: 1, nome: 'Pedro', email: 'pedro@teste.com', role: 'user' };
+    const novoUsuario = {
+      id: 1,
+      nome: 'Pedro',
+      email: 'pedro@teste.com',
+      role: 'user',
+    };
     const returningMock = jest.fn().mockResolvedValue([novoUsuario]);
     const valuesMock = jest.fn().mockReturnValue({ returning: returningMock });
     const mockDb = {

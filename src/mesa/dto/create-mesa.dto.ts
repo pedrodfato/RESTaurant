@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsNumber, IsString, IsEnum } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsEnum,
+  IsPositive,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateMesaDto {
@@ -10,6 +16,7 @@ export class CreateMesaDto {
   @IsNumber({}, { message: 'A capacidade da mesa deve ser um número.' })
   @IsNotEmpty({ message: 'A capacidade da mesa é obrigatória.' })
   @ApiProperty({ description: 'Capacidade da mesa', example: 4 })
+  @IsPositive({ message: 'A capacidade da mesa deve ser um valor positivo.' })
   capacidade: number;
 
   @IsEnum(['disponivel', 'reservada', 'inativa'], {

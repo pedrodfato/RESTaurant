@@ -1,4 +1,3 @@
-
 import { pgTable, serial, text, integer, timestamp } from 'drizzle-orm/pg-core';
 
 export const mesas = pgTable('mesas', {

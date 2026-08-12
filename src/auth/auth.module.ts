@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
+import 'dotenv/config';
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import { jwtConstants } from './constants';
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '1d' }, // Token expira em 1 dia
+      signOptions: { expiresIn: '1d' },
     }),
   ],
   controllers: [AuthController],

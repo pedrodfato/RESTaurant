@@ -38,29 +38,15 @@ export class UsersService {
 
   async findAll() {
     const data = await this.db.query.users.findMany({
-      columns: { senha: false },
+      columns: { senha: false, role:false, email: false },
     });
     return data;
   }
 
-  async findOne(id: number) {
-    return await this.db.query.users.findFirst({
-      where: eq(schema.users.id, id),
-      columns: { senha: false },
-    });
-  }
 
   async findOneByEmail(email: string) {
     return this.db.query.users.findFirst({
       where: eq(schema.users.email, email),
     });
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
   }
 }

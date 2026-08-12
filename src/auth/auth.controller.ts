@@ -7,9 +7,13 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('/login')
-  signIn(@Body() signInDto: Record<string, any>) {
-    const email = signInDto.email || signInDto.username;
-    const password = signInDto.senha || signInDto.password;
-    return this.authService.signIn(email, password);
+  async signIn(@Body() signInDto: Record<string, any>) {
+
+      
+      const email = signInDto.email || signInDto.username;
+      const password = signInDto.password || signInDto.senha;
+    
+      
+    return await this.authService.signIn(email, password); 
   }
 }

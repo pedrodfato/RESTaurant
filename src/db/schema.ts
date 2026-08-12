@@ -1,4 +1,5 @@
-import { pgTable, serial, text, integer, date } from 'drizzle-orm/pg-core';
+
+import { pgTable, serial, text, integer, timestamp } from 'drizzle-orm/pg-core';
 
 export const mesas = pgTable('mesas', {
   id: serial('id').primaryKey(),
@@ -21,6 +22,7 @@ export const reservas = pgTable('reservas', {
   id: serial('id').primaryKey(),
   usuario_id: integer('usuario_id').references(() => users.id),
   mesa_id: integer('mesa_id').references(() => mesas.id),
-  data_reserva: date('data_reserva').notNull(),
-  status: text('status', { enum: ['ativa', 'cancelado'] }),
+  data_reserva: timestamp('data_reserva').notNull(),
+  status: text('status', { enum: ['ativa', 'cancelada'] }),
+  numero_pessoas: integer('numero_pessoas').notNull(),
 });

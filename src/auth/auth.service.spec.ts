@@ -1,18 +1,31 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
+import { UsersService } from '../users/users.service';
 
 describe('AuthService', () => {
-  let service: AuthService;
+  it('deve lançar UnauthorizedException quando o usuário não existe', async () => {
+    const usersServiceMock = {
+      findOneByEmail: jest.fn().mockResolvedValue(null),
+    };
+    const jwtServiceMock = {
+      signAsync: jest.fn(),
+    };
 
-  beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AuthService],
+      providers: [
+        AuthService,
+        { provide: UsersService, useValue: usersServiceMock },
+        { provide: JwtService, useValue: jwtServiceMock },
+      ],
     }).compile();
 
-    service = module.get<AuthService>(AuthService);
-  });
+    const service = module.get<AuthService>(AuthService);
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+    await expect(service.signIn('naoexiste@teste.com', '123456')).rejects.toThrow(
+      UnauthorizedException,
+    );
+    expect(jwtServiceMock.signAsync).not.toHaveBeenCalled();
   });
 });

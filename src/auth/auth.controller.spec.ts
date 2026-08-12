@@ -1,18 +1,23 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
 
 describe('AuthController', () => {
-  let controller: AuthController;
+  it('deve extrair email e senha do body e delegar pro AuthService', async () => {
+    const authServiceMock = {
+      signIn: jest.fn().mockResolvedValue({ access_token: 'token-falso' }),
+    };
 
-  beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
+      providers: [{ provide: AuthService, useValue: authServiceMock }],
     }).compile();
 
-    controller = module.get<AuthController>(AuthController);
-  });
+    const controller = module.get<AuthController>(AuthController);
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+    const result = await controller.signIn({ email: 'pedro@teste.com', senha: '123456' });
+
+    expect(result).toEqual({ access_token: 'token-falso' });
+    expect(authServiceMock.signIn).toHaveBeenCalledWith('pedro@teste.com', '123456');
   });
 });

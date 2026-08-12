@@ -2,17 +2,25 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MesaService } from './mesa.service';
 
 describe('MesaService', () => {
-  let service: MesaService;
+  it('deve retornar a mesa encontrada pelo id', async () => {
+    const mesaMock = { id: 1, nome: 'Mesa 1', capacidade: 4, status: 'disponivel' };
+    const mockDb = {
+      query: {
+        mesas: {
+          findFirst: jest.fn().mockResolvedValue(mesaMock),
+        },
+      },
+    };
 
-  beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MesaService],
+      providers: [MesaService, { provide: 'DRIZZLE', useValue: mockDb }],
     }).compile();
 
-    service = module.get<MesaService>(MesaService);
-  });
+    const service = module.get<MesaService>(MesaService);
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+    const result = await service.findOne(1);
+
+    expect(result).toEqual(mesaMock);
+    expect(mockDb.query.mesas.findFirst).toHaveBeenCalledTimes(1);
   });
 });

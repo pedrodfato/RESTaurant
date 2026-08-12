@@ -3,7 +3,7 @@ import { CreateReservaDto } from './dto/create-reserva.dto';
 import { UpdateReservaDto } from './dto/update-reserva.dto';
 import * as schema from '../db/schema';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 
 @Injectable()
 export class ReservasService {
@@ -15,9 +15,6 @@ export class ReservasService {
     });
       if (!mesa){
       throw new NotFoundException('Mesa não encontrada');
-    }
-    else if (mesa.status !== 'disponivel'){
-      throw new ConflictException('Mesa não disponível para reserva'); 
     }
     if (createReservaDto.numero_pessoas > mesa.capacidade){
       throw new ConflictException('Número de pessoas excede a capacidade da mesa');
@@ -32,21 +29,28 @@ export class ReservasService {
     }
     
     const reserva = await this.db.transaction(async (tx) => {
+ 
+      const [mesaAtualizada] = await tx.update(schema.mesas)
+      .set({ status: 'reservada' })
+      .where(and(eq(schema.mesas.id, createReservaDto.mesa_id), eq(schema.mesas.status, 'disponivel'))).returning({
+        id: schema.mesas.id,
+        status: schema.mesas.status,
+      });
+
+      if (!mesaAtualizada) {
+        throw new ConflictException('Mesa não disponível para reserva');
+      }
 
       const [novaReserva] = await tx.insert(schema.reservas)
-      .values({...createReservaDto, status: 'ativa', data_reserva: new Date(createReservaDto.data_reserva)})
-      .returning({
+      .values({...createReservaDto, status: 'ativa', data_reserva: new Date(createReservaDto.data_reserva)}).returning({
         mesa_id: schema.reservas.mesa_id,
         usuario_id: schema.reservas.usuario_id,
         data_reserva: schema.reservas.data_reserva,
         status: schema.reservas.status,
         numero_pessoas: schema.reservas.numero_pessoas,
         id: schema.reservas.id,
-      })
-
-      await tx.update(schema.mesas)
-        .set({ status: 'reservada' })
-        .where(eq(schema.mesas.id, createReservaDto.mesa_id))
+      });
+      
 
       return novaReserva;
     })
